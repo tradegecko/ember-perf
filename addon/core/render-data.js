@@ -26,7 +26,9 @@ RenderData.prototype = {
     if (!this._active) {
       return;
     }
-
+    if(!payload.view._debugContainerKey && !payload.view.helperName){
+      return
+    }
     switch (name) {
       case 'render.component':
       case 'render.view':
@@ -35,7 +37,7 @@ RenderData.prototype = {
         let v = {
           startTime,
           id,
-          containerKey: payload.view._debugContainerKey
+          containerKey: payload.view._debugContainerKey || payload.view.helperName
         };
         let viewIdx = this.viewData.length;
         this.viewData.push(v);
@@ -53,7 +55,9 @@ RenderData.prototype = {
     if (!this._active) {
       return;
     }
-
+    if(!payload.view._debugContainerKey && !payload.view.helperName){
+      return
+    }
     switch (name) {
       case 'render.component':
       case 'render.view':
