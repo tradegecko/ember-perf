@@ -82,9 +82,9 @@ export default Base.extend(Evented, {
       destRoute: transitionRoute
     });
     transitionInfo.promise.then(() => {
-      this.transitionData.finish();
       let event = this.transitionData;
       scheduleOnce('afterRender', () => {
+        this.transitionData.finish();
         this.trigger('transitionComplete', event);
       });
     });
