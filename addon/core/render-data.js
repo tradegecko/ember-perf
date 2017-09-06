@@ -32,18 +32,30 @@ RenderData.prototype = {
     switch (name) {
       case 'render.component':
       case 'render.view':
+        let containerKey = payload.view._debugContainerKey || payload.view.helperName;
+        if(containerKey === 'view'){
+          containerKey = payload.view.constructor.toString();
+        }
         let id = payload.view.elementId;
         let startTime = t();
         let v = {
           startTime,
           id,
-          containerKey: payload.view._debugContainerKey || payload.view.helperName
+          containerKey: containerKey
         };
         let viewIdx = this.viewData.length;
         this.viewData.push(v);
 
-        if (payload.view.parentView) {
-          v.parentViewId = payload.view.parentView.elementId;
+        if (payload.view._parentView) {
+          let parentView = payload.view._parentView;
+
+          let parentId = parentView.elementId
+          if(!parentId) {
+            //metamorphs have one :
+            let slug = parentView.toString().split('::')[1] || parentView.toString().split(':')[1];
+            parentId = slug.replace('>','');
+          }
+          v.parentViewId = parentId;
         }
 
         this._viewAdded(v, viewIdx);
